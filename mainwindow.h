@@ -1,19 +1,13 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
-#include <QMessageBox>
-#include <QSqlDatabase>
-#include <QSqlError>
-#include <QSqlQuery>
-#include <QTableWidget>
+#include "modules.h"
 #include "usermenu.h"
+#include "warehouseOwnerMenu.h"
 
-QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
 }
-QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow
 {
@@ -28,9 +22,16 @@ private slots:
     void dbConnect();
     void loadUsersTable();
     void login();
+    void addNewUser();
+    void setupUsersTable();
+    void populateAccountTypes(QComboBox *comboBox);
+    void connectSignals();
+    void onSignupTypeChanged(int index);
+    void returnToMain();
 
 private:
     Ui::MainWindow *ui;
     UserMenu *userMenu;
+    WarehouseOwnerMenu *wuMenu;
 };
 #endif // MAINWINDOW_H

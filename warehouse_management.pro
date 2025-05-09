@@ -11,15 +11,29 @@ CONFIG += c++17
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
-    usermenu.cpp
+    productUtils.cpp \
+    productWindowUtils.cpp \
+    receivingWindow.cpp \
+    sendingWindow.cpp \
+    usermenu.cpp \
+    warehouseOwnerMenu.cpp
 
 HEADERS += \
     mainwindow.h \
-    usermenu.h
+    modules.h \
+    productUtils.h \
+    productWindowUtils.h \
+    sendingWindow.h \
+    receivingWindow.h \
+    usermenu.h \
+    warehouseOwnerMenu.h
 
 FORMS += \
     mainwindow.ui \
-    usermenu.ui
+    sendingWindow.ui \
+    receivingWindow.ui \
+    usermenu.ui \
+    warehouseOwnerMenu.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
