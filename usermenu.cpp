@@ -1,12 +1,11 @@
 #include "usermenu.h"
 
-UserMenu::UserMenu(QSqlDatabase connection, int userId, QWidget *parent)
+UserMenu::UserMenu(QSqlDatabase connection, QWidget *parent)
     : QMainWindow(parent),
     ui(new Ui::UserMenu),
     dbconn(connection),
-    currentUserId(userId),
-    sendingWind(new SendingWindow(dbconn, -1, this)),
-    receivingWind(new ReceivingWindow(dbconn, -1, this))
+    sendingWind(new SendingWindow(dbconn, this)),
+    receivingWind(new ReceivingWindow(dbconn, this))
 {
     ui->setupUi(this);
 

@@ -4,6 +4,7 @@
 #include "modules.h"
 #include "usermenu.h"
 #include "warehouseOwnerMenu.h"
+#include "employeeMenu.h"
 
 namespace Ui {
 class MainWindow;
@@ -33,5 +34,6 @@ private:
     Ui::MainWindow *ui;
     UserMenu *userMenu;
     WarehouseOwnerMenu *wuMenu;
+    EmployeeMenu *eMenu;
 };
 #endif // MAINWINDOW_H

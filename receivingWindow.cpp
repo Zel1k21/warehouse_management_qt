@@ -1,7 +1,7 @@
 #include "receivingWindow.h"
 
-ReceivingWindow::ReceivingWindow(QSqlDatabase connection, int userId, QWidget *parent)
-    : ProductWindowUtils(connection, userId, parent), ui(new Ui::ReceivingWindow) {
+ReceivingWindow::ReceivingWindow(QSqlDatabase connection, QWidget *parent)
+    : ProductWindowUtils(connection, parent), ui(new Ui::ReceivingWindow) {
     ui->setupUi(this);
 
     connect(ui->goBackButton, &QPushButton::clicked, this, &ReceivingWindow::close);

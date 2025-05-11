@@ -1,7 +1,7 @@
 #include "sendingWindow.h"
 
-SendingWindow::SendingWindow(QSqlDatabase connection, int userId, QWidget *parent)
-    : ProductWindowUtils(connection, userId, parent), ui(new Ui::SendingWindow)
+SendingWindow::SendingWindow(QSqlDatabase connection, QWidget *parent)
+    : ProductWindowUtils(connection, parent), ui(new Ui::SendingWindow)
 {
     ui->setupUi(this);
 

@@ -9,6 +9,7 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    employeeMenu.cpp \
     main.cpp \
     mainwindow.cpp \
     productUtils.cpp \
@@ -19,6 +20,7 @@ SOURCES += \
     warehouseOwnerMenu.cpp
 
 HEADERS += \
+    employeeMenu.h \
     mainwindow.h \
     modules.h \
     productUtils.h \
@@ -29,6 +31,7 @@ HEADERS += \
     warehouseOwnerMenu.h
 
 FORMS += \
+    employeeMenu.ui \
     mainwindow.ui \
     sendingWindow.ui \
     receivingWindow.ui \

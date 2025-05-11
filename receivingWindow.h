@@ -13,7 +13,7 @@ class ReceivingWindow: public ProductWindowUtils {
     Q_OBJECT
 
 public:
-    explicit ReceivingWindow(QSqlDatabase connection, int userId = -1, QWidget *parent = nullptr);
+    explicit ReceivingWindow(QSqlDatabase connection, QWidget *parent = nullptr);
     ~ReceivingWindow();
     void loadReceivingWindow(int);
     void loadProdutList();

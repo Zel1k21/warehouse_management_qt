@@ -33,7 +33,7 @@
      <property name="geometry">
       <rect>
        <x>160</x>
-       <y>90</y>
+       <y>130</y>
        <width>201</width>
        <height>21</height>
       </rect>
@@ -43,7 +43,7 @@
      <property name="geometry">
       <rect>
        <x>160</x>
-       <y>130</y>
+       <y>90</y>
        <width>201</width>
        <height>21</height>
       </rect>
@@ -199,7 +199,7 @@
       <string>Вместимость</string>
      </property>
     </widget>
-    <widget class="QLineEdit" name="CapacityInput">
+    <widget class="QLineEdit" name="capacityInput">
      <property name="geometry">
       <rect>
        <x>110</x>

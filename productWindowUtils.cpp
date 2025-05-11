@@ -1,7 +1,7 @@
 #include "productWindowUtils.h"
 
-ProductWindowUtils::ProductWindowUtils(QSqlDatabase db, int userId, QWidget *parent)
-    : QMainWindow(parent), dbconn(db), currentUserId(userId) {}
+ProductWindowUtils::ProductWindowUtils(QSqlDatabase db, QWidget *parent)
+    : QMainWindow(parent), dbconn(db) {}
 
 void ProductWindowUtils::showError(const QString &title, const QSqlError &error) const {
     QMessageBox::critical(nullptr, title, error.text());

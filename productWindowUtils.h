@@ -9,7 +9,7 @@ protected:
     QSqlDatabase dbconn;
     int currentUserId;
 
-    explicit ProductWindowUtils(QSqlDatabase db, int userId, QWidget *parent = nullptr);
+    explicit ProductWindowUtils(QSqlDatabase db, QWidget *parent = nullptr);
     void showError(const QString &title, const QSqlError &error) const;
     int getProductIdByName(const QString &name) const;
     void loadProductsIntoComboBox(QComboBox *comboBox, bool allowNewItem = false) const;

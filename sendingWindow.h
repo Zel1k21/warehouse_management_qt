@@ -15,7 +15,7 @@ class SendingWindow : public ProductWindowUtils {
     Q_OBJECT
 
 public:
-    explicit SendingWindow(QSqlDatabase connection, int userId = -1, QWidget *parent = nullptr);
+    explicit SendingWindow(QSqlDatabase connection, QWidget *parent = nullptr);
     ~SendingWindow();
 
     void loadSendingWindow(int userId);

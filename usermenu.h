@@ -14,7 +14,7 @@ class UserMenu: public QMainWindow{
     Q_OBJECT
 
 public:
-    explicit UserMenu(QSqlDatabase connection, int userId = -1, QWidget *parent = nullptr);
+    explicit UserMenu(QSqlDatabase connection, QWidget *parent = nullptr);
     ~UserMenu();
     void loadUserMenu(int userId);
     void handleLogout();

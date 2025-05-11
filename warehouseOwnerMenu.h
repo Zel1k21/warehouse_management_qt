@@ -12,7 +12,7 @@ class WarehouseOwnerMenu: public QMainWindow
     Q_OBJECT
 
 public:
-    explicit WarehouseOwnerMenu(QSqlDatabase connection, int userId = -1, QWidget *parent = nullptr);
+    explicit WarehouseOwnerMenu(QSqlDatabase connection, QWidget *parent = nullptr);
     ~WarehouseOwnerMenu();
     void loadWarehouseOwnerMenu(int userId);
     void handleLogout();
@@ -29,6 +29,7 @@ private:
     void loadTable(QTableWidget* table, const QString& sql);
     void fillUserData();
     void fillWarehouseData();
+    void updateInputData();
 };
 
 #endif // WAREHOUSEOWNERMENU_H
