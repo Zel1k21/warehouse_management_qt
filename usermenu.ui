@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>АС &quot;Склад товаров компьютерных компонентов&quot;</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QLabel" name="welcomeLabel">
@@ -62,9 +62,9 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>30</x>
+      <x>120</x>
       <y>60</y>
-      <width>201</width>
+      <width>171</width>
       <height>20</height>
      </rect>
     </property>
@@ -75,9 +75,9 @@
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
-      <x>410</x>
+      <x>510</x>
       <y>60</y>
-      <width>171</width>
+      <width>151</width>
       <height>20</height>
      </rect>
     </property>
@@ -101,7 +101,7 @@
    <widget class="QPushButton" name="newSendingButton">
     <property name="geometry">
      <rect>
-      <x>130</x>
+      <x>100</x>
       <y>330</y>
       <width>141</width>
       <height>29</height>
@@ -114,7 +114,7 @@
    <widget class="QPushButton" name="newReceivingButton">
     <property name="geometry">
      <rect>
-      <x>510</x>
+      <x>540</x>
       <y>330</y>
       <width>141</width>
       <height>29</height>
@@ -127,8 +127,8 @@
    <widget class="QLabel" name="label_3">
     <property name="geometry">
      <rect>
-      <x>240</x>
-      <y>370</y>
+      <x>220</x>
+      <y>400</y>
       <width>63</width>
       <height>20</height>
      </rect>
@@ -140,8 +140,8 @@
    <widget class="QLabel" name="label_4">
     <property name="geometry">
      <rect>
-      <x>240</x>
-      <y>400</y>
+      <x>220</x>
+      <y>430</y>
       <width>63</width>
       <height>20</height>
      </rect>
@@ -153,8 +153,8 @@
    <widget class="QLabel" name="label_5">
     <property name="geometry">
      <rect>
-      <x>240</x>
-      <y>430</y>
+      <x>220</x>
+      <y>460</y>
       <width>63</width>
       <height>20</height>
      </rect>
@@ -166,8 +166,8 @@
    <widget class="QLineEdit" name="fullnameInput">
     <property name="geometry">
      <rect>
-      <x>320</x>
-      <y>370</y>
+      <x>300</x>
+      <y>400</y>
       <width>201</width>
       <height>21</height>
      </rect>
@@ -176,8 +176,8 @@
    <widget class="QLineEdit" name="phoneInput">
     <property name="geometry">
      <rect>
-      <x>320</x>
-      <y>400</y>
+      <x>300</x>
+      <y>430</y>
       <width>201</width>
       <height>21</height>
      </rect>
@@ -186,8 +186,8 @@
    <widget class="QLineEdit" name="emailInput">
     <property name="geometry">
      <rect>
-      <x>320</x>
-      <y>430</y>
+      <x>300</x>
+      <y>460</y>
       <width>201</width>
       <height>21</height>
      </rect>
@@ -196,14 +196,40 @@
    <widget class="QPushButton" name="updateButton">
     <property name="geometry">
      <rect>
-      <x>320</x>
-      <y>460</y>
+      <x>330</x>
+      <y>490</y>
       <width>151</width>
       <height>29</height>
      </rect>
     </property>
     <property name="text">
      <string>Обновить данные</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="searchField">
+    <property name="geometry">
+     <rect>
+      <x>280</x>
+      <y>330</y>
+      <width>231</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="placeholderText">
+     <string>Поиск товара</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="warehouseFillButton">
+    <property name="geometry">
+     <rect>
+      <x>280</x>
+      <y>360</y>
+      <width>231</width>
+      <height>29</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Заполненность складов</string>
     </property>
    </widget>
   </widget>

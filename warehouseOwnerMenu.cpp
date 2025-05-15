@@ -4,6 +4,7 @@ WarehouseOwnerMenu::WarehouseOwnerMenu(QSqlDatabase connection, QWidget *parent)
     :QMainWindow(parent), ui(new Ui::WarehouseOwnerMenu), dbconn(connection)
 {
     ui->setupUi(this);
+    setFixedSize(800, 600);
     connect(ui->goBackButton, &QPushButton::clicked, this, &WarehouseOwnerMenu::handleLogout);
     connect(ui->switchToProduct, &QPushButton::clicked, this, [=](){
         ui->infoTypeWidget->setCurrentIndex(1);
@@ -15,6 +16,7 @@ WarehouseOwnerMenu::WarehouseOwnerMenu(QSqlDatabase connection, QWidget *parent)
     });
     connect(ui->warehouseSelection, &QComboBox::currentIndexChanged, this, &WarehouseOwnerMenu::handleInfoTypeSwitch);
     connect(ui->saveButton, &QPushButton::clicked, this, &WarehouseOwnerMenu::updateInputData);
+    connect(ui->searchField, &QLineEdit::textChanged, this, &WarehouseOwnerMenu::handleInfoTypeSwitch);
 }
 
 WarehouseOwnerMenu::~WarehouseOwnerMenu()
@@ -55,10 +57,9 @@ void WarehouseOwnerMenu::loadWarehouseOwnerMenu(int userId){
 }
 
 void WarehouseOwnerMenu::handleInfoTypeSwitch(){
-    QString sql;
     QSqlQuery query(dbconn);
-    sql = "select warehouse_id from warehouse where address = :address";
-    query.prepare(sql);
+    QString sql;
+    query.prepare("select warehouse_id from warehouse where address = :address");
     query.bindValue(":address",ui->warehouseSelection->currentText());
 
     if (!query.exec()) {
@@ -74,7 +75,7 @@ void WarehouseOwnerMenu::handleInfoTypeSwitch(){
         ui->productTable->setColumnCount(5);
         ui->productTable->setHorizontalHeaderLabels({"Название", "Стоимость", "На складе", "Отправлено", "Получено"});
         sql = "select name, cost, quantity, total_sent, total_received "
-              "from ProductWithQuantity where warehouse_id = :w_id and quantity > 0";
+              "from ProductWithQuantity where warehouse_id = :w_id and quantity > 0 and name ILIKE :search";
         loadTable(ui->productTable, sql);
     } else if (ui->infoTypeWidget->currentIndex() == 0) {
         ui->employeeTable->clear();
@@ -82,7 +83,7 @@ void WarehouseOwnerMenu::handleInfoTypeSwitch(){
         ui->employeeTable->setColumnCount(4);
         ui->employeeTable->setHorizontalHeaderLabels({"ФИО", "Опыт", "Должность", "Телефон"});
         sql = "select fullname, experience, status, phone "
-              "from employee where warehouse_id = :w_id";
+              "from employee where warehouse_id = :w_id and fullname ILIKE :search";
         loadTable(ui->employeeTable, sql);
     }
     ui->productTable->setColumnWidth(0, 160);
@@ -96,8 +97,10 @@ void WarehouseOwnerMenu::handleInfoTypeSwitch(){
 
 void WarehouseOwnerMenu::loadTable(QTableWidget* table, const QString& sql){
     QSqlQuery query(dbconn);
+    QString search = ui->searchField->text();
     query.prepare(sql);
     query.bindValue(":w_id", selectedWarehouse);
+    query.bindValue(":search", "%" + search + "%");
 
     if (!query.exec()) {
         QMessageBox::critical(this, "Ошибка", query.lastError().text());

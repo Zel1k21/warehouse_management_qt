@@ -4,6 +4,11 @@ EmployeeMenu::EmployeeMenu(QSqlDatabase connection, QWidget *parent)
     :QMainWindow(parent), ui(new Ui::EmployeeMenu), dbconn(connection)
 {
     ui->setupUi(this);
+    setFixedSize(800, 600);
+
+    connect(ui->goBackButton, &QPushButton::clicked, this, &EmployeeMenu::handleLogout);
+    connect(ui->dataUpdateButton, &QPushButton::clicked, this, &EmployeeMenu::updateUserData);
+    connect(ui->searchField, &QLineEdit::textChanged, this, [=]{loadEmployeeMenu(currentUserId);});
 }
 
 EmployeeMenu::~EmployeeMenu(){
@@ -26,17 +31,16 @@ void EmployeeMenu::loadEmployeeMenu(int userId){
     loadProductTable();
     loadUserData();
     fillWarehouseInput();
-
-    connect(ui->goBackButton, &QPushButton::clicked, this, &EmployeeMenu::handleLogout);
-    connect(ui->dataUpdateButton, &QPushButton::clicked, this, &EmployeeMenu::updateUserData);
 }
 
 void EmployeeMenu::loadProductTable(){
     QSqlQuery query(dbconn);
+    QString search = ui->searchField->text();
     query.prepare("select p.name, p.cost, p.quantity, p.total_received, p.total_sent "
                   "from ProductWithQuantity p join employee e on e.warehouse_id = p.warehouse_id "
-                  "where e.employee_id = :e_id order by product_id");
+                  "where e.employee_id = :e_id and p.quantity > 0 and p.name ILIKE :search order by product_id");
     query.bindValue(":e_id", currentUserId);
+    query.bindValue(":search", "%" + search + "%");
 
     if (!query.exec()) {
         QMessageBox::critical(this, "Ошибка", query.lastError().text());

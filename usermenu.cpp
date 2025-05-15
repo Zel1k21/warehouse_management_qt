@@ -9,6 +9,7 @@ UserMenu::UserMenu(QSqlDatabase connection, QWidget *parent)
 {
     ui->setupUi(this);
 
+    setFixedSize(800, 600);
     setupTable(ui->sendingTable);
     setupTable(ui->receivingTable);
 
@@ -18,6 +19,7 @@ UserMenu::UserMenu(QSqlDatabase connection, QWidget *parent)
     });
     connect(ui->newSendingButton, &QPushButton::clicked, this, &UserMenu::addSending);
     connect(ui->newReceivingButton, &QPushButton::clicked, this, &UserMenu::addReceiving);
+    connect(ui->warehouseFillButton, &QPushButton::clicked, this, &UserMenu::showWarehouseFullness);
 
     connect(sendingWind, &SendingWindow::goBack, this, [=]() {
         this->show();
@@ -27,6 +29,8 @@ UserMenu::UserMenu(QSqlDatabase connection, QWidget *parent)
         this->show();
         loadUserMenu(currentUserId);
     });
+    connect(ui->searchField, &QLineEdit::textChanged,
+            this, [=] {loadUserMenu(currentUserId);});
 }
 
 UserMenu::~UserMenu() {
@@ -78,8 +82,10 @@ void UserMenu::setupTable(QTableWidget* table) {
 
 void UserMenu::loadTable(QTableWidget* table, const QString& sql, int userId) {
     QSqlQuery query(dbconn);
+    QString search = ui->searchField->text();
     query.prepare(sql);
     query.bindValue(":user_id", userId);
+    query.bindValue(":search", "%" + search + "%");
 
     if (!query.exec()) {
         QMessageBox::critical(this, "Ошибка", query.lastError().text());
@@ -107,6 +113,7 @@ void UserMenu::loadSendingTable() {
         FROM sending s
         JOIN product p ON s.product_id = p.product_id
         WHERE s.user_id = :user_id
+        and p.name ILIKE :search
     )";
     loadTable(ui->sendingTable, sql, currentUserId);
 }
@@ -122,6 +129,7 @@ void UserMenu::loadReceivingTable() {
         FROM receiving r
         JOIN product p ON r.product_id = p.product_id
         WHERE r.user_id = :user_id
+        and p.name ILIKE :search
     )";
     loadTable(ui->receivingTable, sql, currentUserId);
 }
@@ -162,4 +170,9 @@ void UserMenu::addReceiving() {
 void UserMenu::handleLogout() {
     this->close();
     emit backToLogin();
+}
+
+void UserMenu::showWarehouseFullness() {
+    WarehouseDialog dialog(dbconn, this);
+    dialog.exec();
 }

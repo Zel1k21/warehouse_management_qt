@@ -1,19 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-enum class AccountType { Invalid, User, Owner, Employee };
-
-AccountType stringToAccountType(const QString &str) {
-    if (str == "Пользователь") return AccountType::User;
-    if (str == "Владелец склада") return AccountType::Owner;
-    if (str == "Сотрудник") return AccountType::Employee;
-    return AccountType::Invalid;
-}
-
-QStringList getAccountTypeStrings() {
-    return {"Выберите тип", "Пользователь", "Владелец склада", "Сотрудник"};
-}
-
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -29,6 +16,12 @@ MainWindow::MainWindow(QWidget *parent)
     populateAccountTypes(ui->signupAccountType);
 
     connectSignals();
+    ui->userPhone->setInputMask("+7 (000) 000-00-00;_");
+    ui->ownerPhone->setInputMask("+7 (000) 000-00-00;_");
+    ui->employeePhone->setInputMask("+7 (000) 000-00-00;_");
+    ui->loginPassword->setEchoMode(QLineEdit::Password);
+    ui->signupPassword->setEchoMode(QLineEdit::Password);
+    setFixedSize(800, 600);
 
     ui->loginAccountType->setCurrentIndex(0);
     ui->signupAccountType->setCurrentIndex(0);
@@ -90,7 +83,7 @@ void MainWindow::onSignupTypeChanged(int index) {
     QString typeText = ui->signupAccountType->itemText(index);
     AccountType type = stringToAccountType(typeText);
     switch (type) {
-    case AccountType::Employee: ui->signupStackedWidget->setCurrentIndex(0); break;
+    case AccountType::Employee: ui->signupStackedWidget->setCurrentIndex(0); uploadWarehouseList(); break;
     case AccountType::User: ui->signupStackedWidget->setCurrentIndex(1); break;
     case AccountType::Owner: ui->signupStackedWidget->setCurrentIndex(2); break;
     default: break;
@@ -99,6 +92,7 @@ void MainWindow::onSignupTypeChanged(int index) {
 
 void MainWindow::returnToMain() {
     this->show();
+    ui->loginPassword->clear();
     loadUsersTable();
 }
 
@@ -146,6 +140,7 @@ void MainWindow::login() {
         return;
     }
 
+    QString password = ui->loginPassword->text();
     QString fullname = ui->usersTable->item(selectedRow, 0)->text();
     QSqlQuery query(dbconn);
 
@@ -153,63 +148,147 @@ void MainWindow::login() {
         query.prepare("SELECT user_id FROM users WHERE fullname = :fullname");
         query.bindValue(":fullname", fullname);
         if (query.exec() && query.next()) {
+            if (checkAccountPassword(password, type)) {
             userMenu->loadUserMenu(query.value(0).toInt());
             userMenu->show(); this->hide();
+            } else {
+                QMessageBox::critical(this, "Ошибка", "Направильный пароль");
+                return;
+            }
         }
     } else if (type == AccountType::Owner) {
         query.prepare("SELECT warehouse_owner_id FROM warehouse_owner WHERE fullname = :fullname");
         query.bindValue(":fullname", fullname);
         if (query.exec() && query.next()) {
+            if (checkAccountPassword(password, type)) {
             wuMenu->loadWarehouseOwnerMenu(query.value(0).toInt());
             wuMenu->show(); this->hide();
+            } else {
+                QMessageBox::critical(this, "Ошибка", "Направильный пароль");
+                return;
+            }
         }
     } else if (type == AccountType::Employee) {
         query.prepare("SELECT employee_id FROM employee WHERE fullname = :fullname");
         query.bindValue(":fullname", fullname);
         if (query.exec() && query.next()) {
+            if (checkAccountPassword(password, type)) {
             eMenu->loadEmployeeMenu(query.value(0).toInt());
             eMenu->show(); this->hide();
+            } else {
+                QMessageBox::critical(this, "Ошибка", "Направильный пароль");
+                return;
+            }
         }
     }
 }
 
 void MainWindow::addNewUser() {
     AccountType type = stringToAccountType(ui->signupAccountType->currentText());
-    QSqlQuery query(dbconn), newUserId(dbconn);
+    QSqlQuery query(dbconn);
+    QVariant lastId;
 
     if (type == AccountType::User) {
-        query.prepare("INSERT INTO users (fullname, phone, email) VALUES (?, ?, ?)");
-        query.addBindValue(ui->userFullname->text());
-        query.addBindValue(ui->userPhone->text());
-        query.addBindValue(ui->userEmail->text());
-        newUserId.prepare("select last (user_id) from users");
-        if (newUserId.next())
-            userMenu->loadUserMenu(newUserId.value(0).toInt());
-    } else if (type == AccountType::Owner) {
-        query.prepare("INSERT INTO warehouse_owner (fullname, contact_phone, contact_email, tax_number) VALUES (?, ?, ?, ?)");
-        query.addBindValue(ui->ownerName->text());
-        query.addBindValue(ui->ownerPhone->text());
-        query.addBindValue(ui->ownerEmail->text());
-        query.addBindValue(ui->ownerTaxNumber->text());
-        newUserId.prepare("select last (warehouse_owner_id) from warehouse_owner");
-        if (newUserId.next())
-            wuMenu->loadWarehouseOwnerMenu(newUserId.value(0).toInt());
-    } else if (type == AccountType::Employee) {
-        query.prepare("INSERT INTO employee (fullname, phone, email, warehouse_id) SELECT ?, ?, ?, warehouse_id FROM warehouse WHERE address = ?");
-        query.addBindValue(ui->employeeFullname->text());
-        query.addBindValue(ui->employeePhone->text());
-        query.addBindValue(ui->employeeEmail->text());
-        query.addBindValue(ui->employeeWarehouse->currentText());
-        newUserId.prepare("select last (employee_id) from employee");
-        if (newUserId.next())
-            eMenu->loadEmployeeMenu(newUserId.value(0).toInt());
-    }
+        QString fullname = ui->userFullname->text();
+        QString phone = ui->userPhone->text();
+        QString email = ui->userEmail->text();
 
-    if (!query.exec()) {
-        QMessageBox::critical(this, "Ошибка", query.lastError().text());
-        return;
+        if (!validateUserInput(fullname, phone, email, "пользователя")) return;
+
+        query.prepare("INSERT INTO users (fullname, phone, email) VALUES (?, ?, ?)");
+        query.addBindValue(fullname);
+        query.addBindValue(phone);
+        query.addBindValue(email);
+        if (!query.exec()) {
+            QMessageBox::critical(this, "Ошибка", query.lastError().text());
+            return;
+        }
+
+        lastId = query.lastInsertId();
+        userMenu->loadUserMenu(lastId.toInt());
+        userMenu->show(); this->hide();
+    }
+    else if (type == AccountType::Owner) {
+        QString fullname = ui->ownerName->text();
+        QString phone = ui->ownerPhone->text();
+        QString email = ui->ownerEmail->text();
+        QString tax_number = ui->ownerTaxNumber->text();
+
+        if (!validateUserInput(fullname, phone, email, "владельца", tax_number)) return;
+
+        query.prepare("INSERT INTO warehouse_owner (fullname, contact_phone, contact_email, tax_number) VALUES (?, ?, ?, ?)");
+        query.addBindValue(fullname);
+        query.addBindValue(phone);
+        query.addBindValue(email);
+        query.addBindValue(tax_number);
+        if (!query.exec()) {
+            QMessageBox::critical(this, "Ошибка", query.lastError().text());
+            return;
+        }
+
+        lastId = query.lastInsertId();
+        wuMenu->loadWarehouseOwnerMenu(lastId.toInt());
+        wuMenu->show(); this->hide();
+    }
+    else if (type == AccountType::Employee) {
+        QString fullname = ui->employeeFullname->text();
+        QString phone = ui->employeePhone->text();
+        QString email = ui->employeeEmail->text();
+
+        if (!validateUserInput(fullname, phone, email, "сотрудника")) return;
+
+        query.prepare(R"(INSERT INTO employee (fullname, phone, email, experience, status, warehouse_id)
+                         SELECT ?, ?, ?, 0, ?, warehouse_id FROM warehouse WHERE address = ?)");
+        query.addBindValue(fullname);
+        query.addBindValue(phone);
+        query.addBindValue(email);
+        query.addBindValue("стажер");
+        query.addBindValue(ui->employeeWarehouse->currentText());
+        if (!query.exec()) {
+            QMessageBox::critical(this, "Ошибка", query.lastError().text());
+            return;
+        }
+
+        lastId = query.lastInsertId();
+        eMenu->loadEmployeeMenu(lastId.toInt());
+        eMenu->show(); this->hide();
     }
 
     loadUsersTable();
-    //QMessageBox::information(this, "Успех", "Пользователь добавлен");
+}
+
+
+bool MainWindow::validateUserInput(const QString& fullname, const QString& phone, const QString& email, const QString& role, const QString& tax_number) {
+    if (fullname.trimmed().isEmpty()) {
+        QMessageBox::warning(this, "Предупреждение", QString("Поле ФИО %1 не должно быть пустым").arg(role));
+        return false;
+    }
+
+    if (phone.length() != 18 && email.trimmed().isEmpty()) {
+        QMessageBox::warning(this, "Предупреждение", "Укажите хотя бы телефон или email");
+        return false;
+    }
+    if (tax_number.trimmed().isEmpty()) {
+        QMessageBox::warning(this, "Предупреждение", "ИНН не должен быть пустым");
+        return false;
+    }
+
+    if (tax_number != "-1" && (tax_number.length() != 12 || !tax_number.contains(QRegularExpression("^\\d{12}$")))) {
+        QMessageBox::warning(this, "Предупреждение", "ИНН должен состоять из 12 цифр");
+        return false;
+    }
+
+    return true;
+}
+
+void MainWindow::uploadWarehouseList(){
+    QSqlQuery query(dbconn);
+    query.prepare("select address from warehouse order by warehouse_id");
+    if (!query.exec()){
+        QMessageBox::critical(this, "Ошибка", query.lastError().text());
+        return;
+    }
+    while (query.next()){
+        ui->employeeWarehouse->addItem(query.value(0).toString());
+    }
 }

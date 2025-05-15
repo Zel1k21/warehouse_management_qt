@@ -11,24 +11,24 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>АС &quot;Склад товаров компьютерных компонентов&quot;</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QTableWidget" name="productTable">
     <property name="geometry">
      <rect>
-      <x>20</x>
+      <x>80</x>
       <y>60</y>
-      <width>561</width>
-      <height>231</height>
+      <width>621</width>
+      <height>211</height>
      </rect>
     </property>
    </widget>
    <widget class="QFrame" name="ownerFrame">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>300</y>
+      <x>210</x>
+      <y>310</y>
       <width>371</width>
       <height>201</height>
      </rect>
@@ -186,7 +186,7 @@
    <widget class="QPushButton" name="dataUpdateButton">
     <property name="geometry">
      <rect>
-      <x>110</x>
+      <x>290</x>
       <y>510</y>
       <width>171</width>
       <height>29</height>
@@ -194,6 +194,19 @@
     </property>
     <property name="text">
      <string>Обновить</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="searchField">
+    <property name="geometry">
+     <rect>
+      <x>290</x>
+      <y>280</y>
+      <width>191</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="placeholderText">
+     <string>Поиск</string>
     </property>
    </widget>
   </widget>

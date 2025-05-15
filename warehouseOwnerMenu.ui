@@ -11,14 +11,14 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>АС &quot;Склад товаров компьютерных компонентов&quot;</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QFrame" name="ownerFrame">
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>340</y>
+      <y>330</y>
       <width>371</width>
       <height>201</height>
      </rect>
@@ -139,7 +139,7 @@
     <property name="geometry">
      <rect>
       <x>410</x>
-      <y>340</y>
+      <y>330</y>
       <width>341</width>
       <height>111</height>
      </rect>
@@ -214,7 +214,7 @@
     <property name="geometry">
      <rect>
       <x>510</x>
-      <y>470</y>
+      <y>460</y>
       <width>161</width>
       <height>29</height>
      </rect>
@@ -241,7 +241,7 @@
      <rect>
       <x>30</x>
       <y>50</y>
-      <width>321</width>
+      <width>301</width>
       <height>26</height>
      </rect>
     </property>
@@ -256,7 +256,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="employeePage">
      <widget class="QTableWidget" name="employeeTable">
@@ -273,7 +273,7 @@
       <property name="geometry">
        <rect>
         <x>210</x>
-        <y>200</y>
+        <y>190</y>
         <width>191</width>
         <height>29</height>
        </rect>
@@ -298,7 +298,7 @@
       <property name="geometry">
        <rect>
         <x>210</x>
-        <y>200</y>
+        <y>190</y>
         <width>191</width>
         <height>29</height>
        </rect>
@@ -308,6 +308,19 @@
       </property>
      </widget>
     </widget>
+   </widget>
+   <widget class="QLineEdit" name="searchField">
+    <property name="geometry">
+     <rect>
+      <x>360</x>
+      <y>50</y>
+      <width>271</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="placeholderText">
+     <string>Поиск</string>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">

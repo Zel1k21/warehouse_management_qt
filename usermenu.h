@@ -5,6 +5,7 @@
 #include "ui_usermenu.h"
 #include "sendingWindow.h"
 #include "receivingWindow.h"
+#include "warehouseDialog.h"
 
 namespace Ui {
 class UserMenu;
@@ -38,6 +39,7 @@ private:
     void loadTable(QTableWidget* table, const QString& sql, int userId);
     void loadSendingTable();
     void loadReceivingTable();
+    void showWarehouseFullness();
 };
 
 #endif // USERMENU_H

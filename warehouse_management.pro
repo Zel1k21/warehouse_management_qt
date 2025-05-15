@@ -1,4 +1,4 @@
-QT       += core gui sql
+QT       += core gui sql printsupport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -17,9 +17,11 @@ SOURCES += \
     receivingWindow.cpp \
     sendingWindow.cpp \
     usermenu.cpp \
+    warehouseDialog.cpp \
     warehouseOwnerMenu.cpp
 
 HEADERS += \
+    accountType.h \
     employeeMenu.h \
     mainwindow.h \
     modules.h \
@@ -28,6 +30,7 @@ HEADERS += \
     sendingWindow.h \
     receivingWindow.h \
     usermenu.h \
+    warehouseDialog.h \
     warehouseOwnerMenu.h
 
 FORMS += \

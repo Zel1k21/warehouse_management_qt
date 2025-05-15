@@ -13,5 +13,11 @@
 #include <QInputDialog>
 #include <QApplication>
 #include <QCloseEvent>
+#include <QVBoxLayout>
+#include <QHeaderView>
+#include <QPushButton>
+#include <QPrinter>
+#include <QPrintDialog>
+#include <QPainter>
 
 #endif // MODULES_H

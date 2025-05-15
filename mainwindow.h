@@ -5,6 +5,7 @@
 #include "usermenu.h"
 #include "warehouseOwnerMenu.h"
 #include "employeeMenu.h"
+#include "accountType.h"
 
 namespace Ui {
 class MainWindow;
@@ -29,6 +30,8 @@ private slots:
     void connectSignals();
     void onSignupTypeChanged(int index);
     void returnToMain();
+    void uploadWarehouseList();
+    bool validateUserInput(const QString& fullname, const QString& phone, const QString& email, const QString& role, const QString& tax_number = "-1");
 
 private:
     Ui::MainWindow *ui;

@@ -7,11 +7,11 @@
     <x>0</x>
     <y>0</y>
     <width>428</width>
-    <height>473</height>
+    <height>392</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>АС &quot;Склад товаров компьютерных компонентов&quot;</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QLabel" name="label">
